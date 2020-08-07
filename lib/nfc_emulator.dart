@@ -17,7 +17,7 @@ class NfcEmulator {
     return status;
   }
 
-  static Future<void> startNfcEmulator(String cardAid, String cardUid, String aesKey) async {
+  static Future<void> startNfcEmulator(String cardAid, String cardUid, [String aesKey]) async {
     await _channel.invokeMethod('startNfcEmulator', {
         "cardAid": cardAid,
         "cardUid": cardUid,
