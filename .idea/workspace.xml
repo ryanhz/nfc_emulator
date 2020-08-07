@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e52b5ac7-3c28-421d-b886-bfb18f904cd7" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="ce0317136509a4d80c" />
+  <component name="ProjectId" id="1flA9aAyQ8OaRS7LMnd0rgEohMa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e52b5ac7-3c28-421d-b886-bfb18f904cd7" name="Default Changelist" comment="" />
+      <created>1596782154677</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1596782154677</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="513" y="238" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1596782231184">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state x="513" y="238" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.23.1366.679@0.23.1366.679" timestamp="1596782231184" />
+    <state width="1304" height="190" key="GridCell.Tab.0.bottom" timestamp="1596793293975">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state width="1304" height="190" key="GridCell.Tab.0.bottom/0.23.1366.679@0.23.1366.679" timestamp="1596793293975" />
+    <state width="1304" height="190" key="GridCell.Tab.0.center" timestamp="1596793293974">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state width="1304" height="190" key="GridCell.Tab.0.center/0.23.1366.679@0.23.1366.679" timestamp="1596793293974" />
+    <state width="1304" height="190" key="GridCell.Tab.0.left" timestamp="1596793293974">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state width="1304" height="190" key="GridCell.Tab.0.left/0.23.1366.679@0.23.1366.679" timestamp="1596793293974" />
+    <state width="1304" height="190" key="GridCell.Tab.0.right" timestamp="1596793293974">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state width="1304" height="190" key="GridCell.Tab.0.right/0.23.1366.679@0.23.1366.679" timestamp="1596793293974" />
+    <state width="1304" height="190" key="GridCell.Tab.1.bottom" timestamp="1596793293976">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state width="1304" height="190" key="GridCell.Tab.1.bottom/0.23.1366.679@0.23.1366.679" timestamp="1596793293976" />
+    <state width="1304" height="190" key="GridCell.Tab.1.center" timestamp="1596793293975">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state width="1304" height="190" key="GridCell.Tab.1.center/0.23.1366.679@0.23.1366.679" timestamp="1596793293975" />
+    <state width="1304" height="190" key="GridCell.Tab.1.left" timestamp="1596793293975">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state width="1304" height="190" key="GridCell.Tab.1.left/0.23.1366.679@0.23.1366.679" timestamp="1596793293975" />
+    <state width="1304" height="190" key="GridCell.Tab.1.right" timestamp="1596793293976">
+      <screen x="0" y="23" width="1366" height="679" />
+    </state>
+    <state width="1304" height="190" key="GridCell.Tab.1.right/0.23.1366.679@0.23.1366.679" timestamp="1596793293976" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/io/flutter/plugins/nfc_emulator/NfcEmulatorPlugin.java</url>
+          <line>44</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/io/flutter/plugins/nfc_emulator/NfcEmulatorPlugin.java</url>
+          <line>51</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/io/flutter/plugins/nfc_emulator/NfcEmulatorService.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/io/flutter/plugins/nfc_emulator/NfcEmulatorService.java</url>
+          <line>51</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/io/flutter/plugins/nfc_emulator/NfcEmulatorService.java</url>
+          <line>60</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/android/src/main/java/io/flutter/plugins/nfc_emulator/NfcEmulatorPlugin.java</url>
+          <line>36</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
+          <line>32</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
+          <line>33</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/example/lib/main.dart</url>
+          <line>79</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
