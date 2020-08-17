@@ -57,29 +57,28 @@ class _MyAppState extends State<MyApp> {
         body: Container(
           alignment: Alignment.center,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Version: $_platformVersion'),
-              SizedBox(height: 20.0),
-              Text('Status: $_nfcStatus'),
-              SizedBox(height: 40.0),
-              RaisedButton(
-                child: Text(_started? "Stop Emulator":"Start Emulator"),
-                onPressed: startStopEmulator
-              ),
-            ] 
-          ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('Version: $_platformVersion'),
+                SizedBox(height: 20.0),
+                Text('Status: $_nfcStatus'),
+                SizedBox(height: 40.0),
+                RaisedButton(
+                    child: Text(_started ? "Stop Emulator" : "Start Emulator"),
+                    onPressed: startStopEmulator),
+              ]),
         ),
       ),
     );
   }
 
   void startStopEmulator() async {
-    if(_started) {
+    if (_started) {
       await NfcEmulator.stopNfcEmulator();
     } else {
-      await NfcEmulator.startNfcEmulator("666B65630001", "cd22c716", "79e64d05ed6475d3acf405d6a9cd506b");
+      await NfcEmulator.startNfcEmulator(
+          "666B65630001", "cd22c716", "79e64d05ed6475d3acf405d6a9cd506b");
     }
     setState(() {
       _started = !_started;
