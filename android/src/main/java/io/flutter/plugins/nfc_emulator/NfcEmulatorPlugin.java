@@ -98,7 +98,7 @@ public class NfcEmulatorPlugin implements FlutterPlugin, ActivityAware, MethodCa
     }
 
     private void startNfcEmulator(String cardAid, String cardUid, String aesKey) {
-        SharedPreferences sharePerf = getSharedPreferences("NfcEmulator", Context.MODE_PRIVATE);
+        SharedPreferences sharePerf = activity.getSharedPreferences("NfcEmulator", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharePerf.edit();
         editor.putString("cardAid", cardAid);
         editor.putString("cardUid", cardUid);
