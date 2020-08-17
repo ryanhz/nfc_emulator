@@ -1,6 +1,10 @@
 package io.flutter.plugins.nfc_emulator;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -9,11 +13,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
-
-import android.content.Intent;
-import android.nfc.NfcAdapter;
-import android.os.Bundle;
 
 /** NfcEmulatorPlugin */
 public class NfcEmulatorPlugin implements FlutterPlugin, ActivityAware, MethodCallHandler {
@@ -84,7 +83,7 @@ public class NfcEmulatorPlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     private int getNfcStatus() {
         if(activity==null) {
-            return 9;
+            return -1;
         }
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(activity);
         if (nfcAdapter == null) {
@@ -109,6 +108,13 @@ public class NfcEmulatorPlugin implements FlutterPlugin, ActivityAware, MethodCa
     private void stopNfcEmulator() {
         Intent intent = new Intent(activity, NfcEmulatorService.class);
         activity.stopService(intent);
+
+        SharedPreferences sharePerf = activity.getSharedPreferences("NfcEmulator", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharePerf.edit();
+        editor.remove("cardAid");
+        editor.remove("cardUid");
+        editor.remove("aesKey");
+        editor.commit();
     }
 
 }

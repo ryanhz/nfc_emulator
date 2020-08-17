@@ -1,18 +1,18 @@
 package io.flutter.plugins.nfc_emulator;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.cardemulation.HostApduService;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
+
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import java.util.Arrays;
-
-import io.flutter.Log;
 
 
 public class NfcEmulatorService extends HostApduService {
@@ -37,50 +37,60 @@ public class NfcEmulatorService extends HostApduService {
 
     private static final byte[] GET_DATA_APDU = buildGetDataApdu();
 
+    private SharedPreferences sharePerf;
+    private Vibrator vibrator;
+
     private String cardAid = null;
     private String cardUid = null;
     private String aesKey = null;
 
-    private Vibrator vibrator;
-
     @Override
     public void onCreate() {
         super.onCreate();
-        vibrator = (Vibrator) this.getSystemService(this.VIBRATOR_SERVICE);
+        sharePerf = getSharedPreferences("NfcEmulator", Context.MODE_PRIVATE);
+        cardAid = sharePerf.getString("cardAid", null);
+        cardUid = sharePerf.getString("cardUid", null);
+        aesKey  = sharePerf.getString("aesKey", null);
+        vibrator = (Vibrator) this.getSystemService(NfcEmulatorService.VIBRATOR_SERVICE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         cardAid = intent.getStringExtra("cardAid");
-        SELECT_APDU = buildSelectApdu(cardAid);
         cardUid = intent.getStringExtra("cardUid");
         aesKey = intent.getStringExtra("aesKey");
+
+        SharedPreferences.Editor editor = sharePerf.edit();
+        editor.putString("cardAid", cardAid);
+        editor.putString("cardUid", cardUid);
+        editor.putString("aesKey", aesKey);
+        editor.apply();
+
+        SELECT_APDU = buildSelectApdu(cardAid);
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public byte[] processCommandApdu(byte[] bytes, Bundle bundle) {
-        byte[] commandApdu = bytes;
-
-        if(cardAid==null || cardAid=="" || cardUid==null || cardUid=="") {
+        if(cardAid==null || cardAid.equals("") || cardUid==null || cardUid.equals("")) {
             return UNKNOWN_CMD_SW; // don't start emulator
         }
 
         // If the APDU matches the SELECT AID command for this service,
         // send the loyalty card account number, followed by a SELECT_OK status trailer (0x9000).
-        if (Arrays.equals(SELECT_APDU, commandApdu)) {
-            Log.i(TAG, "< SELECT_APDU: "+ byteArrayToHexString(commandApdu));
+        if (Arrays.equals(SELECT_APDU, bytes)) {
+            Log.i(TAG, "< SELECT_APDU: "+ byteArrayToHexString(bytes));
             String account = "";
             // Log.i(TAG,"send data1:"+account);
             byte[] accountBytes = hexStringToByteArray(account);
             byte[] response = concatArrays(accountBytes, SELECT_OK_SW);
-            Log.i(TAG, "> SELECT_APDU: "+ byteArrayToHexString(commandApdu));
+            Log.i(TAG, "> SELECT_APDU: "+ byteArrayToHexString(bytes));
             return response;
         } else {
-            byte[] decrypted = commandApdu;
+            byte[] decrypted = bytes;
             if(aesKey!=null) {
                 try {
-                    decrypted = decrypt(aesKey, commandApdu);
+                    decrypted = decrypt(aesKey, bytes);
                 } catch (Exception e) {
                     Log.e(TAG, "Exception in decryption", e);
                 }
@@ -89,6 +99,9 @@ public class NfcEmulatorService extends HostApduService {
                 Log.i(TAG, "< GET_DATA_APDU: "+ byteArrayToHexString(decrypted));
                 try {
                     byte[] bytesToSend = buildGetDataReply();
+                    if(bytesToSend==null) {
+                        return null;
+                    }
                     if(aesKey!=null) {
                         try {
                             bytesToSend = encrypt(aesKey, bytesToSend);
@@ -136,7 +149,7 @@ public class NfcEmulatorService extends HostApduService {
         return hexStringToByteArray(GET_DATA_APDU_HEADER + "0FFF");
     }
 
-    private byte[] buildGetDataReply() throws Exception {
+    private byte[] buildGetDataReply() {
         if(0 == cardUid.length() || 32 != aesKey.length()) {
             return null;
         }
@@ -147,20 +160,18 @@ public class NfcEmulatorService extends HostApduService {
 	
 	public static byte[] encrypt(String key, byte[] clear) throws Exception {
         byte[] raw = hexStringToByteArray(key);
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, AES);
+        SecretKeySpec keySpec = new SecretKeySpec(raw, AES);
         Cipher cipher = Cipher.getInstance(CIPHERMODE);
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
-        byte[] encrypted = cipher.doFinal(clear);
-        return encrypted;
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
+        return cipher.doFinal(clear);
     }
 
 	public static byte[] decrypt(String key, byte[] clear) throws Exception {
         byte[] raw = hexStringToByteArray(key);
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, AES);
+        SecretKeySpec keySpec = new SecretKeySpec(raw, AES);
         Cipher cipher = Cipher.getInstance(CIPHERMODE);
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
-        byte[] decrypted = cipher.doFinal(clear);
-        return decrypted;
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
+        return cipher.doFinal(clear);
     }
 
     /**
