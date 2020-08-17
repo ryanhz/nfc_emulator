@@ -37,7 +37,6 @@ public class NfcEmulatorService extends HostApduService {
 
     private static final byte[] GET_DATA_APDU = buildGetDataApdu();
 
-    private SharedPreferences sharePerf;
     private Vibrator vibrator;
 
     private String cardAid = null;
@@ -47,27 +46,14 @@ public class NfcEmulatorService extends HostApduService {
     @Override
     public void onCreate() {
         super.onCreate();
-        sharePerf = getSharedPreferences("NfcEmulator", Context.MODE_PRIVATE);
+        vibrator = (Vibrator) this.getSystemService(NfcEmulatorService.VIBRATOR_SERVICE);
+        SharedPreferences sharePerf = getSharedPreferences("NfcEmulator", Context.MODE_PRIVATE);
         cardAid = sharePerf.getString("cardAid", null);
         cardUid = sharePerf.getString("cardUid", null);
         aesKey  = sharePerf.getString("aesKey", null);
-        vibrator = (Vibrator) this.getSystemService(NfcEmulatorService.VIBRATOR_SERVICE);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        cardAid = intent.getStringExtra("cardAid");
-        cardUid = intent.getStringExtra("cardUid");
-        aesKey = intent.getStringExtra("aesKey");
-
-        SharedPreferences.Editor editor = sharePerf.edit();
-        editor.putString("cardAid", cardAid);
-        editor.putString("cardUid", cardUid);
-        editor.putString("aesKey", aesKey);
-        editor.apply();
-
-        SELECT_APDU = buildSelectApdu(cardAid);
-        return super.onStartCommand(intent, flags, startId);
+        if( cardAid!=null && !cardAid.equals("") ) {
+            SELECT_APDU = buildSelectApdu(cardAid);
+        }
     }
 
     @Override
@@ -100,7 +86,7 @@ public class NfcEmulatorService extends HostApduService {
                 try {
                     byte[] bytesToSend = buildGetDataReply();
                     if(bytesToSend==null) {
-                        return null;
+                        return UNKNOWN_CMD_SW;
                     }
                     if(aesKey!=null) {
                         try {
