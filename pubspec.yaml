@@ -1,6 +1,6 @@
 name: nfc_emulator
 description: A Flutter plugin to emulate the NFC tag. Supported only on Android (Apple is being Apple).
-version: 1.0.1
+version: 1.0.1+1
 homepage: https://github.com/ryanhz/nfc_emulator
 
 environment:
