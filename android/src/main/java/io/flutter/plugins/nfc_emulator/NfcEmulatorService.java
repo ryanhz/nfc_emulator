@@ -28,14 +28,14 @@ public class NfcEmulatorService extends HostApduService {
     private static final String GET_DATA_APDU_HEADER = "00CA0000";
 
     // "OK" status word sent in response to SELECT AID command (0x9000)
-    private static final byte[] SELECT_OK_SW = HexStringToByteArray("9000");
+    private static final byte[] SELECT_OK_SW = hexStringToByteArray("9000");
 
     // "UNKNOWN" status word sent in response to invalid APDU command (0x0000)
-    private static final byte[] UNKNOWN_CMD_SW = HexStringToByteArray("0000");
+    private static final byte[] UNKNOWN_CMD_SW = hexStringToByteArray("0000");
 
     private static byte[] SELECT_APDU;
 
-    private static final byte[] GET_DATA_APDU = BuildGetDataApdu();
+    private static final byte[] GET_DATA_APDU = buildGetDataApdu();
 
     private String cardAid = null;
     private String cardUid = null;
@@ -52,7 +52,7 @@ public class NfcEmulatorService extends HostApduService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         cardAid = intent.getStringExtra("cardAid");
-        SELECT_APDU = BuildSelectApdu(cardAid);
+        SELECT_APDU = buildSelectApdu(cardAid);
         cardUid = intent.getStringExtra("cardUid");
         aesKey = intent.getStringExtra("aesKey");
         return super.onStartCommand(intent, flags, startId);
@@ -69,12 +69,12 @@ public class NfcEmulatorService extends HostApduService {
         // If the APDU matches the SELECT AID command for this service,
         // send the loyalty card account number, followed by a SELECT_OK status trailer (0x9000).
         if (Arrays.equals(SELECT_APDU, commandApdu)) {
-            Log.i(TAG, "< SELECT_APDU: "+ ByteArrayToHexString(commandApdu));
+            Log.i(TAG, "< SELECT_APDU: "+ byteArrayToHexString(commandApdu));
             String account = "";
             // Log.i(TAG,"send data1:"+account);
-            byte[] accountBytes = HexStringToByteArray(account);
-            byte[] response = ConcatArrays(accountBytes, SELECT_OK_SW);
-            Log.i(TAG, "> SELECT_APDU: "+ ByteArrayToHexString(commandApdu));
+            byte[] accountBytes = hexStringToByteArray(account);
+            byte[] response = concatArrays(accountBytes, SELECT_OK_SW);
+            Log.i(TAG, "> SELECT_APDU: "+ byteArrayToHexString(commandApdu));
             return response;
         } else {
             byte[] decrypted = commandApdu;
@@ -86,12 +86,19 @@ public class NfcEmulatorService extends HostApduService {
                 }
             }
             if (Arrays.equals(GET_DATA_APDU, decrypted)) {
-                Log.i(TAG, "< GET_DATA_APDU: "+ ByteArrayToHexString(decrypted));
+                Log.i(TAG, "< GET_DATA_APDU: "+ byteArrayToHexString(decrypted));
                 try {
-                    byte[] bytesCardNum = MakeAesCardNumToSend();
-                    Log.i(TAG, "> GET_DATA_APDU: "+ ByteArrayToHexString(bytesCardNum));
+                    byte[] bytesToSend = buildGetDataReply();
+                    if(aesKey!=null) {
+                        try {
+                            bytesToSend = encrypt(aesKey, bytesToSend);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Exception in encryption", e);
+                        }
+                    }
+                    Log.i(TAG, "> GET_DATA_APDU: "+ byteArrayToHexString(bytesToSend));
                     vibrator.vibrate(400);
-                    return bytesCardNum;
+                    return bytesToSend;
                 } catch (Exception e) {
                     Log.e(TAG, "Exception in GET_DATA_APDU", e);
                 }
@@ -113,9 +120,9 @@ public class NfcEmulatorService extends HostApduService {
      * @param aid Application ID (AID) to select
      * @return APDU for SELECT AID command
      */
-    public static byte[] BuildSelectApdu(String aid) {
+    public static byte[] buildSelectApdu(String aid) {
         // Format: [CLASS | INSTRUCTION | PARAMETER 1 | PARAMETER 2 | LENGTH | DATA]
-        return HexStringToByteArray(SELECT_APDU_HEADER + String.format("%02X",
+        return hexStringToByteArray(SELECT_APDU_HEADER + String.format("%02X",
                 aid.length() / 2) + aid);
     }
 
@@ -124,28 +131,22 @@ public class NfcEmulatorService extends HostApduService {
      *
      * @return APDU for SELECT AID command
      */
-    public static byte[] BuildGetDataApdu() {
+    public static byte[] buildGetDataApdu() {
         // Format: [CLASS | INSTRUCTION | PARAMETER 1 | PARAMETER 2 | LENGTH | DATA]
-        return HexStringToByteArray(GET_DATA_APDU_HEADER + "0FFF");
+        return hexStringToByteArray(GET_DATA_APDU_HEADER + "0FFF");
     }
 
-    private byte[] MakeAesCardNumToSend() throws Exception {
+    private byte[] buildGetDataReply() throws Exception {
         if(0 == cardUid.length() || 32 != aesKey.length()) {
             return null;
         }
         String sCardMsg =  String.format("%02X", cardUid.length() / 2) + cardUid;
-
-        byte[] accountBytes = HexStringToByteArray(sCardMsg);
-
-        byte[] ByteToSend = ConcatArrays(accountBytes, SELECT_OK_SW);
-
-		byte[] AESByteToSend = aesKey==null? ByteToSend:encrypt(aesKey, ByteToSend);
-
-        return AESByteToSend;
+        byte[] accountBytes = hexStringToByteArray(sCardMsg);
+        return concatArrays(accountBytes, SELECT_OK_SW);
     }
 	
 	public static byte[] encrypt(String key, byte[] clear) throws Exception {
-        byte[] raw = HexStringToByteArray(key);
+        byte[] raw = hexStringToByteArray(key);
         SecretKeySpec skeySpec = new SecretKeySpec(raw, AES);
         Cipher cipher = Cipher.getInstance(CIPHERMODE);
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
@@ -154,7 +155,7 @@ public class NfcEmulatorService extends HostApduService {
     }
 
 	public static byte[] decrypt(String key, byte[] clear) throws Exception {
-        byte[] raw = HexStringToByteArray(key);
+        byte[] raw = hexStringToByteArray(key);
         SecretKeySpec skeySpec = new SecretKeySpec(raw, AES);
         Cipher cipher = Cipher.getInstance(CIPHERMODE);
         cipher.init(Cipher.DECRYPT_MODE, skeySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
@@ -168,7 +169,7 @@ public class NfcEmulatorService extends HostApduService {
      * @param bytes Bytes to convert
      * @return String, containing hexadecimal representation.
      */
-    public static String ByteArrayToHexString(byte[] bytes) {
+    public static String byteArrayToHexString(byte[] bytes) {
         final char[] hexArray = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
         char[] hexChars = new char[bytes.length * 2]; // Each byte has two hex characters (nibbles)
         int v;
@@ -190,7 +191,7 @@ public class NfcEmulatorService extends HostApduService {
      * @return Byte array generated from input
      * @throws java.lang.IllegalArgumentException if input length is incorrect
      */
-    public static byte[] HexStringToByteArray(String s) throws IllegalArgumentException {
+    public static byte[] hexStringToByteArray(String s) throws IllegalArgumentException {
         int len = s.length();
         if (len % 2 == 1) {
             throw new IllegalArgumentException("Hex string must have even number of characters");
@@ -210,7 +211,7 @@ public class NfcEmulatorService extends HostApduService {
      * @param rest Any remaining arrays
      * @return Concatenated copy of input arrays
      */
-    public static byte[] ConcatArrays(byte[] first, byte[]... rest) {
+    public static byte[] concatArrays(byte[] first, byte[]... rest) {
         int totalLength = first.length;
         for (byte[] array : rest) {
             totalLength += array.length;
