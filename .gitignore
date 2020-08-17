@@ -2,6 +2,8 @@
 .dart_tool/
 .idea/*
 android/.idea/
+android/.settings
+example/android/.settings
 
 .packages
 .pub/
