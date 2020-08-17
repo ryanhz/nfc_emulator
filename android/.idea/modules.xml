@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nfc_emulator.iml" filepath="$PROJECT_DIR$/.idea/modules/nfc_emulator.iml" group="nfc_emulator" />
-    </modules>
-  </component>
-</project>
