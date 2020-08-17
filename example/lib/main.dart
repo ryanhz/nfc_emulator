@@ -15,7 +15,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  int _nfcStatus = -1;
+  NfcStatus _nfcStatus = NfcStatus.unknown;
   bool _started = false;
 
   @override
@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
-    int nfcStatus;
+    NfcStatus nfcStatus;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await NfcEmulator.platformVersion;

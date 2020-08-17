@@ -3,6 +3,13 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+enum NfcStatus {
+  unknown,
+  enabled,
+  notSupported,
+  notEnabled
+}
+
 class NfcEmulator {
   static const MethodChannel _channel =
       const MethodChannel('nfc_emulator');
@@ -12,11 +19,16 @@ class NfcEmulator {
     return version;
   }
 
-  static Future<int> get nfcStatus async {
+  static Future<NfcStatus> get nfcStatus async {
     final int status = await _channel.invokeMethod('getNfcStatus');
-    return status;
+    return parseNfcStatus(status);
   }
 
+  /*
+   * cardAid: Card AID, for example: 666B65630001
+   * cardUid: Card UID, for example: cd22c716
+   * aesKey: AES key to encrypt, optional, 16 bytes (hex length 32)
+   */
   static Future<void> startNfcEmulator(String cardAid, String cardUid, [String aesKey]) async {
     await _channel.invokeMethod('startNfcEmulator', {
         "cardAid": cardAid,
@@ -27,6 +39,21 @@ class NfcEmulator {
 
   static Future<void> stopNfcEmulator() async {
     await _channel.invokeMethod('stopNfcEmulator');
+  }
+
+  static NfcStatus parseNfcStatus(int value) {
+    switch(value) {
+      case -1:
+        return NfcStatus.unknown;
+      case 0:
+        return NfcStatus.enabled;
+      case 1:
+        return NfcStatus.notSupported;
+      case 2:
+        return NfcStatus.notEnabled;
+      default:
+        return NfcStatus.unknown;
+    }
   }
 
 }
