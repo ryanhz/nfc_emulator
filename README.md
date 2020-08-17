@@ -34,6 +34,7 @@ And `aid_list.xml` to the `android/app/src/main/res/xml` folder (create if not e
     </aid-group>
 </host-apdu-service>
 ```
+</details>
 
 Add emulator service with such metadata to `AndroidManifest.xml`:
 ```
