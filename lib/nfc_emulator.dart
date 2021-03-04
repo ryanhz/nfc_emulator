@@ -10,8 +10,8 @@ class NfcEmulator {
   /*
    * Get platform version
    */
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
+  static Future<String?> get platformVersion async {
+    final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
 
@@ -19,7 +19,7 @@ class NfcEmulator {
    * Get NFC status
    */
   static Future<NfcStatus> get nfcStatus async {
-    final int status = await _channel.invokeMethod('getNfcStatus');
+    final int? status = await _channel.invokeMethod('getNfcStatus');
     return _parseNfcStatus(status);
   }
 
@@ -30,7 +30,7 @@ class NfcEmulator {
    * aesKey: AES key to encrypt, optional, 16 bytes (hex length 32)
    */
   static Future<void> startNfcEmulator(String cardAid, String cardUid,
-      [String aesKey]) async {
+      [String? aesKey]) async {
     await _channel.invokeMethod('startNfcEmulator', {
       "cardAid": cardAid,
       "cardUid": cardUid,
@@ -45,7 +45,7 @@ class NfcEmulator {
     await _channel.invokeMethod('stopNfcEmulator');
   }
 
-  static NfcStatus _parseNfcStatus(int value) {
+  static NfcStatus _parseNfcStatus(int? value) {
     switch (value) {
       case -1:
         return NfcStatus.unknown;
