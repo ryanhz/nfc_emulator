@@ -26,8 +26,8 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
-    NfcStatus nfcStatus;
+    String? platformVersion;
+    NfcStatus? nfcStatus;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await NfcEmulator.platformVersion;
@@ -42,8 +42,8 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
-      _nfcStatus = nfcStatus;
+      _platformVersion = platformVersion ?? 'Unknown';
+      _nfcStatus = nfcStatus ?? NfcStatus.unknown;
     });
   }
 
