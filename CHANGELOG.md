@@ -1,3 +1,6 @@
+## 2.0.0-nullsafety.0
+* BREAKING CHANGE with Null Safety support
+
 ## 1.1.0-nullsafety.0
 * Null Safety support
 
