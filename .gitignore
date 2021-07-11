@@ -1,9 +1,11 @@
 .DS_Store
 .dart_tool/
 .idea/*
+pubspec.lock
 android/.idea/
 android/.settings
 example/android/.settings
+example/pubspec.lock
 
 .packages
 .pub/
