@@ -2,6 +2,16 @@
 
 A Flutter plugin to emulate the NFC tag. Supported only on Android (Apple is being Apple).
 
+This NFC Emulator plugin was written mainly for the CIDRON reader (the AID is in the example):
+http://www.civintec.com/info_22.aspx?itemid=35
+
+This kind of reader is using peer-to-peer mode to exchange data, which includes the AES encrypted card UID.
+
+Note:
+It is impossible for Android to emulate an NFC tag with constant UID in host card emulation mode,
+please refer to [this] (https://stackoverflow.com/questions/46484272/emulate-nfc-card-with-selected-uid-on-android)
+and [this] (https://stackoverflow.com/questions/9662979/how-to-fix-uid-in-nfc)
+
 ## Installing
 
 Add to pubspec.yaml:
