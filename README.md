@@ -9,8 +9,8 @@ This kind of reader is using peer-to-peer mode to exchange data, which includes 
 
 Note:
 It is impossible for Android to emulate an NFC tag with constant UID in host card emulation mode,
-please refer to [this] (https://stackoverflow.com/questions/46484272/emulate-nfc-card-with-selected-uid-on-android)
-and [this] (https://stackoverflow.com/questions/9662979/how-to-fix-uid-in-nfc)
+please refer to <https://stackoverflow.com/questions/46484272/emulate-nfc-card-with-selected-uid-on-android>
+and <https://stackoverflow.com/questions/9662979/how-to-fix-uid-in-nfc>.
 
 ## Installing
 
