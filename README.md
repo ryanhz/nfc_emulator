@@ -3,7 +3,7 @@
 A Flutter plugin to emulate the NFC tag. Supported only on Android (Apple is being Apple).
 
 This NFC Emulator plugin was written mainly for the CIDRON reader (the AID is in the example):
-http://www.civintec.com/info_22.aspx?itemid=35
+[http://www.civintec.com/info_22.aspx?itemid=35](https://security.civintec.com/info_22.aspx?itemid=40)
 
 This kind of reader is using peer-to-peer mode to exchange data, which includes the AES encrypted card UID.
 
